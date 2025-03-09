@@ -165,9 +165,7 @@ export default function ToolsPage() {
                 <TabsTrigger value="featured">Featured</TabsTrigger>
                 <TabsTrigger value="latest">Latest</TabsTrigger>
               </TabsList>
-            </Tabs>
-
-            <div className="flex flex-col md:flex-row gap-2 w-full md:w-auto">
+              <div className="flex flex-col md:flex-row gap-2 w-full md:w-auto">
               <div className="flex gap-2">
                 <Select defaultValue="language">
                   <SelectTrigger className="w-full md:w-[150px] bg-malectrica-darker border-malectrica-blue/30">
@@ -205,9 +203,7 @@ export default function ToolsPage() {
                 <ArrowDownAZ className="h-4 w-4" />
               </Button>
             </div>
-          </div>
-
-          <TabsContent value="all" className="mt-6">
+              <TabsContent value="all" className="mt-6">
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {allTools.map((tool, i) => (
                 <Card
@@ -340,6 +336,8 @@ export default function ToolsPage() {
               ))}
             </div>
           </TabsContent>
+            </Tabs>
+          </div>
 
           <div className="flex items-center justify-center mt-8 gap-2">
             {[1, 2, 3, 4, 5].map((page) => (
