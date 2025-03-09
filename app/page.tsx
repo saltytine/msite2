@@ -262,7 +262,7 @@ Running exploit verification...\n
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Link href={`https://github.com/malectrica/${tool.slug}`} target="_blank">
+                          <Link href={`https://github.com/malectricasoftware/${tool.slug}`} target="_blank">
                             <Button
                               variant="ghost"
                               size="sm"
