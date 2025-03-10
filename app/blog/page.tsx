@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { ChevronRight, Filter, Tag, Clock, Heart } from "lucide-react"
+import { ChevronRight, Filter, Tag, Clock, Heart } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -17,6 +17,8 @@ export default function BlogPage() {
   const itemsPerPage = 6
   const [filteredPosts, setFilteredPosts] = useState([])
   const [displayedPosts, setDisplayedPosts] = useState([])
+  // Add a new state variable for the active tab
+  const [activeTab, setActiveTab] = useState("all");
 
   const blogPosts = [
     {
@@ -118,7 +120,7 @@ export default function BlogPage() {
       likes: 103,
       comments: 31,
       readTime: "16 min",
-      tags: ["Zero Trust", "Enterprise Security", "Architecture"],
+      tags: ["Zero Trust", "Enterprise Security", "Architecture", "Trends"],
     },
     {
       title: "Reverse Engineering iOS Applications",
@@ -132,7 +134,7 @@ export default function BlogPage() {
       likes: 91,
       comments: 22,
       readTime: "13 min",
-      tags: ["iOS", "Mobile Security", "Reverse Engineering"],
+      tags: ["iOS", "Mobile Security", "Reverse Engineering", "Tutorial"],
     },
     {
       title: "Building Effective Security Monitoring",
@@ -147,39 +149,54 @@ export default function BlogPage() {
       likes: 88,
       comments: 25,
       readTime: "9 min",
-      tags: ["SOC", "Monitoring", "SIEM", "Detection"],
+      tags: ["SOC", "Monitoring", "SIEM", "Detection", "Research"],
     },
   ]
 
   const featuredPost = blogPosts[0]
   const regularPosts = blogPosts.slice(1)
 
+  // Update the useEffect filtering logic to include tab filtering
   useEffect(() => {
     // Get all posts except the featured one
-    const regularPosts = blogPosts.slice(1)
-
+    const regularPosts = blogPosts.slice(1);
+    
     // Sort posts based on sortBy
-    const sorted = [...regularPosts]
-
+    let sorted = [...regularPosts];
+    
     if (sortBy === "newest") {
-      sorted.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      sorted.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     } else if (sortBy === "oldest") {
-      sorted.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+      sorted.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
     } else if (sortBy === "popular") {
-      sorted.sort((a, b) => b.likes - a.likes)
+      sorted.sort((a, b) => b.likes - a.likes);
     }
-
-    // Apply category filter
-    let filtered = sorted
+    
+    // Apply category filter from dropdown
+    let filtered = sorted;
     if (category !== "all") {
-      filtered = filtered.filter((post) => post.category.toLowerCase().includes(category.toLowerCase()))
+      filtered = filtered.filter(post => post.category.toLowerCase().includes(category.toLowerCase()));
     }
-
-    setFilteredPosts(filtered)
-
+    
+    // Apply tab filter
+    if (activeTab === "trends") {
+      filtered = filtered.filter(post => post.tags.some(tag => tag.toLowerCase().includes("trends")));
+    } else if (activeTab === "tutorials") {
+      // Assuming tutorials would be tagged with a specific category
+      filtered = filtered.filter(post => post.tags.some(tag => tag.toLowerCase().includes("tutorial")));
+    } else if (activeTab === "research") {
+      // Assuming research posts would be tagged with research or have research in the title
+      filtered = filtered.filter(post => 
+        post.tags.some(tag => tag.toLowerCase().includes("research")) || 
+        post.title.toLowerCase().includes("research")
+      );
+    }
+    
+    setFilteredPosts(filtered);
+    
     // Reset to first page when filters change
-    setCurrentPage(1)
-  }, [sortBy, category])
+    setCurrentPage(1);
+  }, [sortBy, category, activeTab]);
 
   useEffect(() => {
     const startIndex = (currentPage - 1) * itemsPerPage
@@ -241,7 +258,8 @@ export default function BlogPage() {
           </div>
 
           <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-            <Tabs defaultValue="all" className="w-full md:w-auto">
+            {/* Update the Tabs component to set the activeTab */}
+            <Tabs defaultValue="all" className="w-full md:w-auto" onValueChange={setActiveTab}>
               <TabsList className="bg-malectrica-darker">
                 <TabsTrigger value="all">All Posts</TabsTrigger>
                 <TabsTrigger value="trends">Trends</TabsTrigger>
