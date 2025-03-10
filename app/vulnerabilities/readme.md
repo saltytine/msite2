@@ -25,6 +25,16 @@
       disclosure_date: "2023-04-08",
       patch_date: "2023-04-05",
       category: "Open Redirect",
-      // options: Injection, Authentication, Cross-Site Scripting, Buffer Overflow, Information Disclosure. if you see an important option missing, you can add it to the list which starts at line 245. if you couldn't tell this will not show up under any of those, so we can add it's category there as well.
+      // options: Injection, Authentication, Cross-Site Scripting, Buffer Overflow, Information Disclosure. 
     },
+```
+if you see an important category missing, you can add it to the list which starts at line 245. if you couldn't tell (dumbass) this will not show up under any of those, so we can add it's category there as well.  
+the list looks like this as of writing:
+```typescript
+<SelectItem value="all">All Categories</SelectItem>
+<SelectItem value="injection">Injection</SelectItem>
+<SelectItem value="auth">Authentication</SelectItem>
+<SelectItem value="xss">Cross-Site Scripting</SelectItem>
+<SelectItem value="overflow">Buffer Overflow</SelectItem>
+<SelectItem value="info">Information Disclosure</SelectItem>
 ```
