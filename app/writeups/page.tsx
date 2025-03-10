@@ -1,14 +1,23 @@
+"use client"
+
 import Link from "next/link"
-import { ChevronRight, Search, Filter, Tag, Clock } from "lucide-react"
+import { ChevronRight, Filter, Tag, Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useState, useEffect } from "react"
 
 export default function WriteUpsPage() {
+  const [currentPage, setCurrentPage] = useState(1)
+  const [category, setCategory] = useState("all")
+  const [sortOrder, setSortOrder] = useState("newest")
+  const itemsPerPage = 6
+  const [filteredWriteups, setFilteredWriteups] = useState([])
+  const [displayedWriteups, setDisplayedWriteups] = useState([])
+
   const writeups = [
     {
       title: "Bypassing WAF Protection: A Case Study",
@@ -136,6 +145,42 @@ export default function WriteUpsPage() {
     },
   ]
 
+  useEffect(() => {
+    // First sort the writeups
+    const sorted = [...writeups]
+
+    if (sortOrder === "newest") {
+      sorted.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    } else if (sortOrder === "oldest") {
+      sorted.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    } else if (sortOrder === "popular") {
+      sorted.sort((a, b) => b.views - a.views)
+    } else if (sortOrder === "readtime") {
+      sorted.sort((a, b) => {
+        const readTimeA = Number.parseInt(a.readTime.split(" ")[0])
+        const readTimeB = Number.parseInt(b.readTime.split(" ")[0])
+        return readTimeA - readTimeB
+      })
+    }
+
+    // Then filter them
+    let filtered = sorted
+    if (category !== "all") {
+      filtered = filtered.filter((writeup) => writeup.category.toLowerCase().includes(category.toLowerCase()))
+    }
+
+    setFilteredWriteups(filtered)
+
+    // Reset to first page when filters change
+    setCurrentPage(1)
+  }, [sortOrder, category])
+
+  useEffect(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage
+    const endIndex = startIndex + itemsPerPage
+    setDisplayedWriteups(filteredWriteups.slice(startIndex, endIndex))
+  }, [currentPage, filteredWriteups, itemsPerPage])
+
   return (
     <div className="min-h-screen bg-malectrica-dark text-gray-100">
       <main className="container py-12">
@@ -146,15 +191,6 @@ export default function WriteUpsPage() {
               <p className="text-gray-400 mt-2">
                 In-depth technical analysis of vulnerabilities and security research findings
               </p>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="relative w-full md:w-64">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
-                <Input
-                  placeholder="Search write-ups..."
-                  className="pl-8 bg-malectrica-darker border-malectrica-blue/30"
-                />
-              </div>
             </div>
           </div>
 
@@ -171,11 +207,11 @@ export default function WriteUpsPage() {
 
             <div className="flex flex-col md:flex-row gap-2 w-full md:w-auto">
               <div className="flex gap-2">
-                <Select defaultValue="category">
+                <Select defaultValue="category" onValueChange={(value) => setCategory(value)}>
                   <SelectTrigger className="w-full md:w-[180px] bg-malectrica-darker border-malectrica-blue/30">
                     <SelectValue placeholder="Category" />
                   </SelectTrigger>
-                  <SelectContent className="bg-malectrica-darker border-malectrica-blue/30">
+                  <SelectContent className="bg-malectrica-darker border-malectrica-blue/30 text-white">
                     <SelectItem value="all">All Categories</SelectItem>
                     <SelectItem value="web">Web Security</SelectItem>
                     <SelectItem value="cloud">Cloud Security</SelectItem>
@@ -185,11 +221,11 @@ export default function WriteUpsPage() {
                   </SelectContent>
                 </Select>
 
-                <Select defaultValue="date">
+                <Select defaultValue="date" onValueChange={(value) => setSortOrder(value)}>
                   <SelectTrigger className="w-full md:w-[150px] bg-malectrica-darker border-malectrica-blue/30">
                     <SelectValue placeholder="Date" />
                   </SelectTrigger>
-                  <SelectContent className="bg-malectrica-darker border-malectrica-blue/30">
+                  <SelectContent className="bg-malectrica-darker border-malectrica-blue/30 text-white">
                     <SelectItem value="newest">Newest First</SelectItem>
                     <SelectItem value="oldest">Oldest First</SelectItem>
                     <SelectItem value="popular">Most Popular</SelectItem>
@@ -208,7 +244,7 @@ export default function WriteUpsPage() {
           </div>
 
           <div className="grid gap-6 mt-6 md:grid-cols-2">
-            {writeups.map((writeup, i) => (
+            {displayedWriteups.map((writeup, i) => (
               <Card
                 key={i}
                 className="bg-malectrica-darker border-malectrica-blue/20 hover:bg-malectrica-blue/10 transition-colors flex flex-col"
@@ -278,13 +314,14 @@ export default function WriteUpsPage() {
             {[1, 2, 3, 4, 5].map((page) => (
               <Button
                 key={page}
-                variant={page === 1 ? "default" : "outline"}
+                variant={page === currentPage ? "default" : "outline"}
                 size="icon"
                 className={`w-9 h-9 ${
-                  page === 1
+                  page === currentPage
                     ? "bg-malectrica-blue/70 hover:bg-malectrica-blue"
                     : "border-malectrica-blue/30 bg-malectrica-darker hover:bg-malectrica-blue/20"
                 }`}
+                onClick={() => setCurrentPage(page)}
               >
                 {page}
               </Button>
@@ -293,6 +330,7 @@ export default function WriteUpsPage() {
               variant="outline"
               size="icon"
               className="w-9 h-9 border-malectrica-blue/30 bg-malectrica-darker hover:bg-malectrica-blue/20"
+              onClick={() => setCurrentPage(Math.min(currentPage + 1, 5))}
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
