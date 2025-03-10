@@ -2,7 +2,19 @@
 
 import Link from "next/link"
 import { useState } from "react"
-import { Shield, Terminal, AlertTriangle, ChevronRight, ExternalLink, Zap, Menu, X, Bell } from "lucide-react"
+import {
+  Shield,
+  Terminal,
+  AlertTriangle,
+  ChevronRight,
+  ExternalLink,
+  Zap,
+  Menu,
+  X,
+  Bell,
+  Github,
+  Users,
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -11,6 +23,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
   const [showNotification, setShowNotification] = useState(false)
 
   const toggleMobileMenu = () => {
@@ -51,6 +64,10 @@ export default function Home() {
             </Link>
             <Link href="/blog" className="transition-colors hover:text-malectrica-brightBlue relative group">
               Blog
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-malectrica-brightBlue transition-all group-hover:w-full"></span>
+            </Link>
+            <Link href="/team" className="transition-colors hover:text-malectrica-brightBlue relative group">
+              Team
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-malectrica-brightBlue transition-all group-hover:w-full"></span>
             </Link>
           </nav>
@@ -105,6 +122,13 @@ export default function Home() {
               >
                 Blog
               </Link>
+              <Link
+                href="/team"
+                className="px-4 py-2 hover:bg-malectrica-blue/10 rounded-md transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Team
+              </Link>
             </nav>
           </div>
         )}
@@ -124,7 +148,7 @@ export default function Home() {
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-gradient-to-b from-malectrica-dark to-malectrica-darker">
           <div className="container px-4 md:px-6">
             <div className="grid gap-6 lg:grid-cols-2 lg:gap-12">
-              <div className="space-y-4">
+              <div className="space-y-4 text-center sm:text-left">
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none text-gray-100">
                   Your Cybersecurity Partner
                 </h1>
@@ -132,7 +156,7 @@ export default function Home() {
                   We are a collective of cybersecurity experts dedicated to finding vulnerabilities, developing security
                   tools, and sharing 1337 knowledge with the community.
                 </p>
-                <div className="flex flex-col gap-2 min-[400px]:flex-row">
+                <div className="flex flex-col gap-2 min-[400px]:flex-row items-center sm:items-start">
                   <Link href="/tools">
                     <Button
                       size="lg"
@@ -153,7 +177,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="flex items-center justify-center">
-                <div className="relative w-full max-w-sm group">
+                <div className="relative w-full max-w-sm mx-auto group">
                   <div className="absolute -inset-0.5 rounded-lg bg-gradient-to-r from-malectrica-blue to-malectrica-brightBlue opacity-75 blur group-hover:opacity-100 transition duration-300"></div>
                   <div className="relative rounded-lg bg-malectrica-darker p-5">
                     <div className="flex items-center border-b border-gray-100/10 pb-2">
@@ -281,7 +305,7 @@ Running exploit verification...\n
                 </Card>
               ))}
             </div>
-            <div className="flex justify-center">
+            <div className="flex justify-center w-full">
               <Link href="/tools">
                 <Button
                   variant="outline"
@@ -411,7 +435,7 @@ Running exploit verification...\n
                 </Card>
               ))}
             </div>
-            <div className="flex justify-center">
+            <div className="flex justify-center w-full">
               <Link href="/vulnerabilities">
                 <Button
                   variant="outline"
@@ -540,7 +564,7 @@ print(f"Forged token: {forged_token}")`}
                 </Card>
               ))}
             </div>
-            <div className="flex justify-center">
+            <div className="flex justify-center w-full">
               <Link href="/pocs">
                 <Button
                   variant="outline"
@@ -647,7 +671,7 @@ print(f"Forged token: {forged_token}")`}
                 </Card>
               ))}
             </div>
-            <div className="flex justify-center">
+            <div className="flex justify-center w-full">
               <Link href="/writeups">
                 <Button
                   variant="outline"
@@ -764,13 +788,164 @@ print(f"Forged token: {forged_token}")`}
                 </Card>
               ))}
             </div>
-            <div className="flex justify-center">
+            <div className="flex justify-center w-full">
               <Link href="/blog">
                 <Button
                   variant="outline"
                   className="gap-1 border-malectrica-blue/50 text-malectrica-blue bg-malectrica-blue/10 hover:bg-malectrica-blue/20 hover:text-malectrica-brightBlue transition-all hover:translate-y-[-2px]"
                 >
                   View All Blog Posts <ChevronRight className="h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Founders Section */}
+        <section id="founders" className="w-full py-12 md:py-24 lg:py-32 bg-malectrica-darker">
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+              <div className="space-y-2">
+                <div className="inline-block rounded-lg bg-malectrica-blue/80 px-3 py-1 text-sm text-gray-100">
+                  Meet Our Founders
+                </div>
+                <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">The Minds Behind Malectrica</h2>
+                <p className="max-w-[900px] text-gray-400 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                  Our founders are renowned security researchers with a track record of discovering critical
+                  vulnerabilities in major systems.
+                </p>
+              </div>
+            </div>
+            <div className="mx-auto grid max-w-5xl gap-8 py-12 md:grid-cols-2">
+              {[
+                {
+                  name: "Alex Winters",
+                  role: "Co-Founder & Chief Security Researcher",
+                  image: "/placeholder.svg?height=400&width=400",
+                  bio: "Former NSA security analyst with over 15 years of experience in offensive security. Discovered 50+ critical vulnerabilities in Fortune 500 companies.",
+                  hackerone: "alexw1nt3rs",
+                  bugcrowd: "alexwinters",
+                  github: "alexw1nt3rs",
+                },
+                {
+                  name: "Samira Khan",
+                  role: "Co-Founder & Lead Exploit Developer",
+                  image: "/placeholder.svg?height=400&width=400",
+                  bio: "Reverse engineering specialist with a background in low-level systems. Known for developing novel exploitation techniques for previously unknown vulnerabilities.",
+                  hackerone: "samira_k",
+                  bugcrowd: "samirakhan",
+                  github: "samirakhan",
+                },
+              ].map((founder, i) => (
+                <div
+                  key={i}
+                  className="group relative overflow-hidden rounded-lg bg-malectrica-dark border border-malectrica-blue/20 hover:border-malectrica-blue/40 transition-all duration-300 hover:shadow-lg hover:shadow-malectrica-blue/20"
+                >
+                  <div className="flex flex-col md:flex-row gap-6 p-6">
+                    <div className="flex-shrink-0 mx-auto md:mx-0">
+                      <div className="relative h-40 w-40 overflow-hidden rounded-full border-2 border-malectrica-blue/50">
+                        <img
+                          src={founder.image || "/placeholder.svg"}
+                          alt={founder.name}
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex flex-col justify-between flex-grow text-center md:text-left">
+                      <div>
+                        <h3 className="text-xl font-bold text-white">{founder.name}</h3>
+                        <p className="mt-1 text-malectrica-blue">{founder.role}</p>
+                        <p className="mt-3 text-gray-400">{founder.bio}</p>
+                      </div>
+                      <div className="mt-4 flex flex-wrap gap-3 justify-center md:justify-start">
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Link
+                                href={`https://hackerone.com/${founder.hackerone}`}
+                                target="_blank"
+                                className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-malectrica-blue/10 text-malectrica-blue hover:bg-malectrica-blue/20 hover:text-malectrica-brightBlue transition-colors"
+                              >
+                                <span className="sr-only">HackerOne Profile</span>
+                                <svg
+                                  width="16"
+                                  height="16"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path
+                                    d="M11.9999 0C5.37991 0 0 5.37991 0 11.9999C0 18.6199 5.37991 24 11.9999 24C18.6199 24 24 18.6199 24 11.9999C24 5.37991 18.6199 0 11.9999 0ZM16.9999 17.4L12 12.3999L6.99994 17.4L6.59998 17.0001L11.6 11.9999L6.59998 6.99994L6.99994 6.59998L12 11.6L16.9999 6.59998L17.4 6.99994L12.3999 11.9999L17.4 17.0001L16.9999 17.4Z"
+                                    fill="currentColor"
+                                  />
+                                </svg>
+                              </Link>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>HackerOne: @{founder.hackerone}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Link
+                                href={`https://bugcrowd.com/${founder.bugcrowd}`}
+                                target="_blank"
+                                className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-malectrica-blue/10 text-malectrica-blue hover:bg-malectrica-blue/20 hover:text-malectrica-brightBlue transition-colors"
+                              >
+                                <span className="sr-only">Bugcrowd Profile</span>
+                                <svg
+                                  width="16"
+                                  height="16"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path
+                                    d="M12 0C5.37258 0 0 5.37258 0 12C0 18.6274 5.37258 24 12 24C18.6274 24 24 18.6274 24 12C24 5.37258 18.6274 0 12 0ZM12 3.5C15.0376 3.5 17.7501 5.02333 19.3262 7.375C19.1766 7.66667 18.9355 7.91667 18.6262 8.125C18.1262 8.45833 17.5012 8.625 16.7512 8.625C15.9179 8.625 15.2262 8.39167 14.6762 7.925C14.1262 7.45833 13.8512 6.85833 13.8512 6.125C13.8512 5.875 13.8929 5.64167 13.9762 5.425C13.3429 5.14167 12.6845 5 12.0012 5C9.24258 5 7.00122 7.24167 7.00122 10C7.00122 12.7583 9.24258 15 12.0012 15C14.7596 15 17.0012 12.7583 17.0012 10C17.0012 9.95833 17.0012 9.91667 17.0012 9.875C17.3345 9.79167 17.6429 9.65 17.9262 9.45C18.3429 9.15833 18.6762 8.79167 18.9262 8.35C18.9762 8.89167 19.0012 9.44167 19.0012 10C19.0012 13.8583 15.8596 17 12.0012 17C8.14258 17 5.00122 13.8583 5.00122 10C5.00122 6.14167 8.14258 3 12.0012 3C12.0012 3 12.0012 3 12 3.5ZM12 7C13.1046 7 14 7.89543 14 9C14 10.1046 13.1046 11 12 11C10.8954 11 10 10.1046 10 9C10 7.89543 10.8954 7 12 7Z"
+                                    fill="currentColor"
+                                  />
+                                </svg>
+                              </Link>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Bugcrowd: @{founder.bugcrowd}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Link
+                                href={`https://github.com/${founder.github}`}
+                                target="_blank"
+                                className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-malectrica-blue/10 text-malectrica-blue hover:bg-malectrica-blue/20 hover:text-malectrica-brightBlue transition-colors"
+                              >
+                                <span className="sr-only">GitHub Profile</span>
+                                <Github className="h-4 w-4" />
+                              </Link>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>GitHub: @{founder.github}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-center w-full">
+              <Link href="/team">
+                <Button
+                  variant="outline"
+                  className="gap-1 border-malectrica-blue/50 text-malectrica-blue bg-malectrica-blue/10 hover:bg-malectrica-blue/20 hover:text-malectrica-brightBlue transition-all hover:translate-y-[-2px]"
+                >
+                  Meet Our Full Team <Users className="h-4 w-4 ml-1" />
                 </Button>
               </Link>
             </div>
@@ -871,6 +1046,11 @@ print(f"Forged token: {forged_token}")`}
                 <li>
                   <Link href="/about" className="hover:text-malectrica-brightBlue transition-colors">
                     About Us
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/team" className="hover:text-malectrica-brightBlue transition-colors">
+                    Our Team
                   </Link>
                 </li>
                 <li>
