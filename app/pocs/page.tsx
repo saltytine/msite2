@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { ChevronRight, Filter, CalendarDays, Code, Github, Eye } from "lucide-react"
+import { ChevronRight, Filter, CalendarDays, Code, Github, Eye } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -166,23 +166,38 @@ export default function POCsPage() {
   const itemsPerPage = 4
   const [filteredPocs, setFilteredPocs] = useState(pocs)
   const [displayedPocs, setDisplayedPocs] = useState([])
+  // Add a new state variable for the active tab
+  const [activeTab, setActiveTab] = useState("all");
 
   useEffect(() => {
-    let result = pocs
-
+    let result = pocs;
+    
+    // Filter by language
     if (language !== "all") {
-      result = result.filter((poc) => poc.language.toLowerCase() === language.toLowerCase())
+      result = result.filter(poc => poc.language.toLowerCase() === language.toLowerCase());
     }
-
+    
+    // Filter by severity
     if (severity !== "all") {
-      result = result.filter((poc) => poc.impact.toLowerCase() === severity.toLowerCase())
+      result = result.filter(poc => poc.impact.toLowerCase() === severity.toLowerCase());
     }
-
-    setFilteredPocs(result)
-
+    
+    // Filter by tab
+    if (activeTab === "verified") {
+      result = result.filter(poc => poc.verifiedWorks === true);
+    } else if (activeTab === "recent") {
+      // Sort by date (most recent first) and take top 5
+      result = [...result].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5);
+    } else if (activeTab === "popular") {
+      // Sort by views (most viewed first)
+      result = [...result].sort((a, b) => b.views - a.views);
+    }
+    
+    setFilteredPocs(result);
+    
     // Reset to first page when filters change
-    setCurrentPage(1)
-  }, [language, severity])
+    setCurrentPage(1);
+  }, [language, severity, activeTab]);
 
   useEffect(() => {
     const startIndex = (currentPage - 1) * itemsPerPage
@@ -204,7 +219,7 @@ export default function POCsPage() {
           </div>
 
           <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-            <Tabs defaultValue="all" className="w-full md:w-auto">
+            <Tabs defaultValue="all" className="w-full md:w-auto" onValueChange={setActiveTab}>
               <TabsList className="bg-malectrica-darker">
                 <TabsTrigger value="all">All POCs</TabsTrigger>
                 <TabsTrigger value="verified">Verified</TabsTrigger>
