@@ -1,11 +1,13 @@
+"use client"
+
 import Link from "next/link"
-import { ChevronRight, Search, Filter, CalendarDays, Code, Github, Eye } from "lucide-react"
+import { ChevronRight, Filter, CalendarDays, Code, Github, Eye } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useState, useEffect } from "react"
 
 export default function POCsPage() {
   const pocs = [
@@ -158,6 +160,36 @@ export default function POCsPage() {
     },
   ]
 
+  const [currentPage, setCurrentPage] = useState(1)
+  const [language, setLanguage] = useState("all")
+  const [severity, setSeverity] = useState("all")
+  const itemsPerPage = 4
+  const [filteredPocs, setFilteredPocs] = useState(pocs)
+  const [displayedPocs, setDisplayedPocs] = useState([])
+
+  useEffect(() => {
+    let result = pocs
+
+    if (language !== "all") {
+      result = result.filter((poc) => poc.language.toLowerCase() === language.toLowerCase())
+    }
+
+    if (severity !== "all") {
+      result = result.filter((poc) => poc.impact.toLowerCase() === severity.toLowerCase())
+    }
+
+    setFilteredPocs(result)
+
+    // Reset to first page when filters change
+    setCurrentPage(1)
+  }, [language, severity])
+
+  useEffect(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage
+    const endIndex = startIndex + itemsPerPage
+    setDisplayedPocs(filteredPocs.slice(startIndex, endIndex))
+  }, [currentPage, filteredPocs, itemsPerPage])
+
   return (
     <div className="min-h-screen bg-malectrica-dark text-gray-100">
       <main className="container py-12">
@@ -168,12 +200,6 @@ export default function POCsPage() {
               <p className="text-gray-400 mt-2">
                 Demonstration code for security researchers to understand and verify vulnerabilities
               </p>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="relative w-full md:w-64">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
-                <Input placeholder="Search POCs..." className="pl-8 bg-malectrica-darker border-malectrica-blue/30" />
-              </div>
             </div>
           </div>
 
@@ -189,11 +215,11 @@ export default function POCsPage() {
 
             <div className="flex flex-col md:flex-row gap-2 w-full md:w-auto">
               <div className="flex gap-2">
-                <Select defaultValue="language">
+                <Select defaultValue="language" onValueChange={(value) => setLanguage(value)}>
                   <SelectTrigger className="w-full md:w-[150px] bg-malectrica-darker border-malectrica-blue/30">
                     <SelectValue placeholder="Language" />
                   </SelectTrigger>
-                  <SelectContent className="bg-malectrica-darker border-malectrica-blue/30">
+                  <SelectContent className="bg-malectrica-darker border-malectrica-blue/30 text-white">
                     <SelectItem value="all">All Languages</SelectItem>
                     <SelectItem value="javascript">JavaScript</SelectItem>
                     <SelectItem value="python">Python</SelectItem>
@@ -203,11 +229,11 @@ export default function POCsPage() {
                   </SelectContent>
                 </Select>
 
-                <Select defaultValue="severity">
+                <Select defaultValue="severity" onValueChange={(value) => setSeverity(value)}>
                   <SelectTrigger className="w-full md:w-[150px] bg-malectrica-darker border-malectrica-blue/30">
                     <SelectValue placeholder="Severity" />
                   </SelectTrigger>
-                  <SelectContent className="bg-malectrica-darker border-malectrica-blue/30">
+                  <SelectContent className="bg-malectrica-darker border-malectrica-blue/30 text-white">
                     <SelectItem value="all">All Severities</SelectItem>
                     <SelectItem value="critical">Critical</SelectItem>
                     <SelectItem value="high">High</SelectItem>
@@ -227,7 +253,7 @@ export default function POCsPage() {
           </div>
 
           <div className="grid gap-6 mt-6">
-            {pocs.map((poc, i) => (
+            {displayedPocs.map((poc, i) => (
               <Card
                 key={i}
                 className="bg-malectrica-darker border-malectrica-blue/20 hover:bg-malectrica-blue/10 transition-colors"
@@ -328,13 +354,14 @@ export default function POCsPage() {
             {[1, 2, 3, 4, 5].map((page) => (
               <Button
                 key={page}
-                variant={page === 1 ? "default" : "outline"}
+                variant={page === currentPage ? "default" : "outline"}
                 size="icon"
                 className={`w-9 h-9 ${
-                  page === 1
+                  page === currentPage
                     ? "bg-malectrica-blue/70 hover:bg-malectrica-blue"
                     : "border-malectrica-blue/30 bg-malectrica-darker hover:bg-malectrica-blue/20"
                 }`}
+                onClick={() => setCurrentPage(page)}
               >
                 {page}
               </Button>
@@ -343,6 +370,7 @@ export default function POCsPage() {
               variant="outline"
               size="icon"
               className="w-9 h-9 border-malectrica-blue/30 bg-malectrica-darker hover:bg-malectrica-blue/20"
+              onClick={() => setCurrentPage(Math.min(currentPage + 1, 5))}
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
