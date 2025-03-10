@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { ChevronRight, Filter, CalendarDays } from "lucide-react"
+import { ChevronRight, Filter, CalendarDays } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -183,23 +183,33 @@ export default function VulnerabilitiesPage() {
   const itemsPerPage = 4
   const [filteredVulnerabilities, setFilteredVulnerabilities] = useState(vulnerabilities)
   const [displayedVulnerabilities, setDisplayedVulnerabilities] = useState([])
+  // Add a new state variable for the active tab
+  const [activeTab, setActiveTab] = useState("all");
 
+  // Update the useEffect filtering logic to include severity filtering
   useEffect(() => {
-    let result = vulnerabilities
+    let result = vulnerabilities;
 
+    // Filter by category
     if (category !== "all") {
-      result = result.filter((vuln) => vuln.category.toLowerCase().includes(category.toLowerCase()))
+      result = result.filter(vuln => vuln.category.toLowerCase().includes(category.toLowerCase()));
     }
 
+    // Filter by year
     if (year !== "all") {
-      result = result.filter((vuln) => vuln.date.startsWith(year))
+      result = result.filter(vuln => vuln.date.startsWith(year));
     }
 
-    setFilteredVulnerabilities(result)
+    // Filter by severity (tab)
+    if (activeTab !== "all") {
+      result = result.filter(vuln => vuln.severity.toLowerCase() === activeTab.toLowerCase());
+    }
+
+    setFilteredVulnerabilities(result);
 
     // Reset to first page when filters change
-    setCurrentPage(1)
-  }, [category, year])
+    setCurrentPage(1);
+  }, [category, year, activeTab]);
 
   useEffect(() => {
     const startIndex = (currentPage - 1) * itemsPerPage
@@ -221,7 +231,8 @@ export default function VulnerabilitiesPage() {
           </div>
 
           <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-            <Tabs defaultValue="all" className="w-full md:w-auto">
+            {/* Update the Tabs component to set the activeTab */}
+            <Tabs defaultValue="all" className="w-full md:w-auto" onValueChange={setActiveTab}>
               <TabsList className="bg-malectrica-darker">
                 <TabsTrigger value="all">All</TabsTrigger>
                 <TabsTrigger value="critical">Critical</TabsTrigger>
