@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { ChevronRight, Filter, Tag, Clock } from "lucide-react"
+import { ChevronRight, Filter, Tag, Clock } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -17,6 +17,8 @@ export default function WriteUpsPage() {
   const itemsPerPage = 6
   const [filteredWriteups, setFilteredWriteups] = useState([])
   const [displayedWriteups, setDisplayedWriteups] = useState([])
+  // Add a new state variable for the active tab
+  const [activeTab, setActiveTab] = useState("all");
 
   const writeups = [
     {
@@ -145,35 +147,49 @@ export default function WriteUpsPage() {
     },
   ]
 
+  // Update the useEffect filtering logic to include tab filtering
   useEffect(() => {
     // First sort the writeups
-    const sorted = [...writeups]
-
+    let sorted = [...writeups];
+    
     if (sortOrder === "newest") {
-      sorted.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      sorted.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     } else if (sortOrder === "oldest") {
-      sorted.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+      sorted.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
     } else if (sortOrder === "popular") {
-      sorted.sort((a, b) => b.views - a.views)
+      sorted.sort((a, b) => b.views - a.views);
     } else if (sortOrder === "readtime") {
       sorted.sort((a, b) => {
-        const readTimeA = Number.parseInt(a.readTime.split(" ")[0])
-        const readTimeB = Number.parseInt(b.readTime.split(" ")[0])
-        return readTimeA - readTimeB
-      })
+        const readTimeA = parseInt(a.readTime.split(" ")[0]);
+        const readTimeB = parseInt(b.readTime.split(" ")[0]);
+        return readTimeA - readTimeB;
+      });
     }
-
+    
     // Then filter them
-    let filtered = sorted
+    let filtered = sorted;
+    
+    // Filter by category dropdown
     if (category !== "all") {
-      filtered = filtered.filter((writeup) => writeup.category.toLowerCase().includes(category.toLowerCase()))
+      filtered = filtered.filter(writeup => writeup.category.toLowerCase().includes(category.toLowerCase()));
     }
-
-    setFilteredWriteups(filtered)
-
+    
+    // Filter by tab
+    if (activeTab === "web") {
+      filtered = filtered.filter(writeup => writeup.category.toLowerCase().includes("web"));
+    } else if (activeTab === "cloud") {
+      filtered = filtered.filter(writeup => writeup.category.toLowerCase().includes("cloud"));
+    } else if (activeTab === "mobile") {
+      filtered = filtered.filter(writeup => writeup.category.toLowerCase().includes("mobile"));
+    } else if (activeTab === "iot") {
+      filtered = filtered.filter(writeup => writeup.category.toLowerCase().includes("iot"));
+    }
+    
+    setFilteredWriteups(filtered);
+    
     // Reset to first page when filters change
-    setCurrentPage(1)
-  }, [sortOrder, category])
+    setCurrentPage(1);
+  }, [sortOrder, category, activeTab]);
 
   useEffect(() => {
     const startIndex = (currentPage - 1) * itemsPerPage
@@ -195,7 +211,8 @@ export default function WriteUpsPage() {
           </div>
 
           <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-            <Tabs defaultValue="all" className="w-full md:w-auto">
+            {/* Update the Tabs component to set the activeTab */}
+            <Tabs defaultValue="all" className="w-full md:w-auto" onValueChange={setActiveTab}>
               <TabsList className="bg-malectrica-darker">
                 <TabsTrigger value="all">All</TabsTrigger>
                 <TabsTrigger value="web">Web Security</TabsTrigger>
