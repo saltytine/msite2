@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { ChevronRight, Filter, Tag, Clock } from 'lucide-react'
+import { ChevronRight, Filter, Tag, Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -12,13 +12,13 @@ import { useState, useEffect } from "react"
 
 export default function WriteUpsPage() {
   const [currentPage, setCurrentPage] = useState(1)
-  const [category, setCategory] = useState("all")
-  const [sortOrder, setSortOrder] = useState("newest")
+  const [category, setCategory] = useState("All Categories")
+  const [sortOrder, setSortOrder] = useState("Newest First")
   const itemsPerPage = 6
   const [filteredWriteups, setFilteredWriteups] = useState([])
   const [displayedWriteups, setDisplayedWriteups] = useState([])
   // Add a new state variable for the active tab
-  const [activeTab, setActiveTab] = useState("all");
+  const [activeTab, setActiveTab] = useState("all")
 
   const writeups = [
     {
@@ -150,46 +150,46 @@ export default function WriteUpsPage() {
   // Update the useEffect filtering logic to include tab filtering
   useEffect(() => {
     // First sort the writeups
-    let sorted = [...writeups];
-    
-    if (sortOrder === "newest") {
-      sorted.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-    } else if (sortOrder === "oldest") {
-      sorted.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-    } else if (sortOrder === "popular") {
-      sorted.sort((a, b) => b.views - a.views);
-    } else if (sortOrder === "readtime") {
+    const sorted = [...writeups]
+
+    if (sortOrder === "Newest First") {
+      sorted.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    } else if (sortOrder === "Oldest First") {
+      sorted.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    } else if (sortOrder === "Most Popular") {
+      sorted.sort((a, b) => b.views - a.views)
+    } else if (sortOrder === "Reading Time") {
       sorted.sort((a, b) => {
-        const readTimeA = parseInt(a.readTime.split(" ")[0]);
-        const readTimeB = parseInt(b.readTime.split(" ")[0]);
-        return readTimeA - readTimeB;
-      });
+        const readTimeA = Number.parseInt(a.readTime.split(" ")[0])
+        const readTimeB = Number.parseInt(b.readTime.split(" ")[0])
+        return readTimeA - readTimeB
+      })
     }
-    
+
     // Then filter them
-    let filtered = sorted;
-    
+    let filtered = sorted
+
     // Filter by category dropdown
-    if (category !== "all") {
-      filtered = filtered.filter(writeup => writeup.category.toLowerCase().includes(category.toLowerCase()));
+    if (category !== "All Categories") {
+      filtered = filtered.filter((writeup) => writeup.category.toLowerCase().includes(category.toLowerCase()))
     }
-    
+
     // Filter by tab
     if (activeTab === "web") {
-      filtered = filtered.filter(writeup => writeup.category.toLowerCase().includes("web"));
+      filtered = filtered.filter((writeup) => writeup.category.toLowerCase().includes("web"))
     } else if (activeTab === "cloud") {
-      filtered = filtered.filter(writeup => writeup.category.toLowerCase().includes("cloud"));
+      filtered = filtered.filter((writeup) => writeup.category.toLowerCase().includes("cloud"))
     } else if (activeTab === "mobile") {
-      filtered = filtered.filter(writeup => writeup.category.toLowerCase().includes("mobile"));
+      filtered = filtered.filter((writeup) => writeup.category.toLowerCase().includes("mobile"))
     } else if (activeTab === "iot") {
-      filtered = filtered.filter(writeup => writeup.category.toLowerCase().includes("iot"));
+      filtered = filtered.filter((writeup) => writeup.category.toLowerCase().includes("iot"))
     }
-    
-    setFilteredWriteups(filtered);
-    
+
+    setFilteredWriteups(filtered)
+
     // Reset to first page when filters change
-    setCurrentPage(1);
-  }, [sortOrder, category, activeTab]);
+    setCurrentPage(1)
+  }, [sortOrder, category, activeTab])
 
   useEffect(() => {
     const startIndex = (currentPage - 1) * itemsPerPage
@@ -210,9 +210,8 @@ export default function WriteUpsPage() {
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-            {/* Update the Tabs component to set the activeTab */}
-            <Tabs defaultValue="all" className="w-full md:w-auto" onValueChange={setActiveTab}>
+          <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
+            <Tabs defaultValue="all" className="w-full lg:w-auto" onValueChange={setActiveTab}>
               <TabsList className="bg-malectrica-darker">
                 <TabsTrigger value="all">All</TabsTrigger>
                 <TabsTrigger value="web">Web Security</TabsTrigger>
@@ -222,41 +221,41 @@ export default function WriteUpsPage() {
               </TabsList>
             </Tabs>
 
-            <div className="flex flex-col md:flex-row gap-2 w-full md:w-auto">
-              <div className="flex gap-2">
-                <Select defaultValue="category" onValueChange={(value) => setCategory(value)}>
-                  <SelectTrigger className="w-full md:w-[180px] bg-malectrica-darker border-malectrica-blue/30">
-                    <SelectValue placeholder="Category" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-malectrica-darker border-malectrica-blue/30 text-white">
-                    <SelectItem value="all">All Categories</SelectItem>
-                    <SelectItem value="web">Web Security</SelectItem>
-                    <SelectItem value="cloud">Cloud Security</SelectItem>
-                    <SelectItem value="authentication">Authentication</SelectItem>
-                    <SelectItem value="blockchain">Blockchain</SelectItem>
-                    <SelectItem value="mobile">Mobile Security</SelectItem>
-                  </SelectContent>
-                </Select>
+            <div className="flex flex-wrap gap-2 w-full lg:w-auto">
+              <Select value={category} onValueChange={(value) => setCategory(value)}>
+                <SelectTrigger className="w-full sm:w-[180px] bg-malectrica-darker border-malectrica-blue/30">
+                  <SelectValue className="text-white">{category}</SelectValue>
+                </SelectTrigger>
+                <SelectContent className="bg-malectrica-darker border-malectrica-blue/30 text-white">
+                  <SelectItem value="All Categories">All Categories</SelectItem>
+                  <SelectItem value="Web Security">Web Security</SelectItem>
+                  <SelectItem value="Cloud Security">Cloud Security</SelectItem>
+                  <SelectItem value="Authentication">Authentication</SelectItem>
+                  <SelectItem value="Blockchain">Blockchain</SelectItem>
+                  <SelectItem value="Mobile Security">Mobile Security</SelectItem>
+                </SelectContent>
+              </Select>
 
-                <Select defaultValue="date" onValueChange={(value) => setSortOrder(value)}>
-                  <SelectTrigger className="w-full md:w-[150px] bg-malectrica-darker border-malectrica-blue/30">
-                    <SelectValue placeholder="Date" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-malectrica-darker border-malectrica-blue/30 text-white">
-                    <SelectItem value="newest">Newest First</SelectItem>
-                    <SelectItem value="oldest">Oldest First</SelectItem>
-                    <SelectItem value="popular">Most Popular</SelectItem>
-                    <SelectItem value="readtime">Reading Time</SelectItem>
-                  </SelectContent>
-                </Select>
+              <Select value={sortOrder} onValueChange={(value) => setSortOrder(value)}>
+                <SelectTrigger className="w-full sm:w-[150px] bg-malectrica-darker border-malectrica-blue/30">
+                  <SelectValue className="text-white">{sortOrder}</SelectValue>
+                </SelectTrigger>
+                <SelectContent className="bg-malectrica-darker border-malectrica-blue/30 text-white">
+                  <SelectItem value="Newest First">Newest First</SelectItem>
+                  <SelectItem value="Oldest First">Oldest First</SelectItem>
+                  <SelectItem value="Most Popular">Most Popular</SelectItem>
+                  <SelectItem value="Reading Time">Reading Time</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <div className="hidden lg:flex gap-2">
+                <Button variant="outline" size="icon" className="border-malectrica-blue/30 bg-malectrica-darker">
+                  <Filter className="h-4 w-4" />
+                </Button>
+                <Button variant="outline" size="icon" className="border-malectrica-blue/30 bg-malectrica-darker">
+                  <Tag className="h-4 w-4" />
+                </Button>
               </div>
-
-              <Button variant="outline" size="icon" className="border-malectrica-blue/30 bg-malectrica-darker">
-                <Filter className="h-4 w-4" />
-              </Button>
-              <Button variant="outline" size="icon" className="border-malectrica-blue/30 bg-malectrica-darker">
-                <Tag className="h-4 w-4" />
-              </Button>
             </div>
           </div>
 
