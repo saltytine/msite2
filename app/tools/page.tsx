@@ -11,8 +11,9 @@ import { useState, useEffect } from "react"
 
 export default function ToolsPage() {
   const [currentPage, setCurrentPage] = useState(1)
-  const [language, setLanguage] = useState("all")
-  const [category, setCategory] = useState("all")
+  const [language, setLanguage] = useState("All Languages")
+  const [category, setCategory] = useState("All Categories")
+  const [sortOrder, setSortOrder] = useState("Newest First")
   const itemsPerPage = 6
   const allTools = [
     {
@@ -149,19 +150,28 @@ export default function ToolsPage() {
   useEffect(() => {
     let result = allTools
 
-    if (language !== "all") {
-      result = result.filter((tool) => tool.language.toLowerCase() === language.toLowerCase())
+    if (language !== "All Languages") {
+      result = result.filter((tool) => tool.language === language)
     }
 
-    if (category !== "all") {
+    if (category !== "All Categories") {
       result = result.filter((tool) => tool.tags.some((tag) => tag.toLowerCase() === category.toLowerCase()))
+    }
+
+    // Apply sorting
+    if (sortOrder === "Newest First") {
+      result = [...result].sort((a, b) => new Date(b.lastUpdate).getTime() - new Date(a.lastUpdate).getTime())
+    } else if (sortOrder === "Oldest First") {
+      result = [...result].sort((a, b) => new Date(a.lastUpdate).getTime() - new Date(b.lastUpdate).getTime())
+    } else if (sortOrder === "Most Popular") {
+      result = [...result].sort((a, b) => b.stars - a.stars)
     }
 
     setFilteredTools(result)
 
     // Reset to first page when filters change
     setCurrentPage(1)
-  }, [language, category])
+  }, [language, category, sortOrder])
 
   useEffect(() => {
     const startIndex = (currentPage - 1) * itemsPerPage
@@ -180,186 +190,205 @@ export default function ToolsPage() {
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-            <Tabs defaultValue="all" className="w-full md:w-auto">
+          <Tabs defaultValue="all" className="w-full">
+            <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
               <TabsList className="bg-malectrica-darker">
                 <TabsTrigger value="all">All Tools</TabsTrigger>
                 <TabsTrigger value="featured">Featured</TabsTrigger>
                 <TabsTrigger value="latest">Latest</TabsTrigger>
               </TabsList>
-              <div className="flex flex-col md:flex-row gap-2 w-full md:w-auto">
-                <div className="flex gap-2">
-                  <Select defaultValue="language" onValueChange={(value) => setLanguage(value)}>
-                    <SelectTrigger className="w-full md:w-[150px] bg-malectrica-darker border-malectrica-blue/30">
-                      <SelectValue placeholder="Language" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-malectrica-darker border-malectrica-blue/30 text-white">
-                      <SelectItem value="all">All Languages</SelectItem>
-                      <SelectItem value="python">Python</SelectItem>
-                      <SelectItem value="rust">Rust</SelectItem>
-                      <SelectItem value="go">Go</SelectItem>
-                      <SelectItem value="javascript">JavaScript</SelectItem>
-                      <SelectItem value="cpp">C/C++</SelectItem>
-                    </SelectContent>
-                  </Select>
+              <div className="flex flex-wrap gap-2 w-full lg:w-auto">
+                <Select value={language} onValueChange={(value) => setLanguage(value)}>
+                  <SelectTrigger className="w-full sm:w-[150px] bg-malectrica-darker border-malectrica-blue/30">
+                    <SelectValue className="text-white">{language}</SelectValue>
+                  </SelectTrigger>
+                  <SelectContent className="bg-malectrica-darker border-malectrica-blue/30 text-white">
+                    <SelectItem value="All Languages">All Languages</SelectItem>
+                    <SelectItem value="Python">Python</SelectItem>
+                    <SelectItem value="Rust">Rust</SelectItem>
+                    <SelectItem value="Go">Go</SelectItem>
+                    <SelectItem value="JavaScript">JavaScript</SelectItem>
+                    <SelectItem value="C++">C++</SelectItem>
+                  </SelectContent>
+                </Select>
 
-                  <Select defaultValue="category" onValueChange={(value) => setCategory(value)}>
-                    <SelectTrigger className="w-full md:w-[150px] bg-malectrica-darker border-malectrica-blue/30">
-                      <SelectValue placeholder="Category" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-malectrica-darker border-malectrica-blue/30 text-white">
-                      <SelectItem value="all">All Categories</SelectItem>
-                      <SelectItem value="network">Network</SelectItem>
-                      <SelectItem value="encryption">Encryption</SelectItem>
-                      <SelectItem value="detection">Detection</SelectItem>
-                      <SelectItem value="cloud">Cloud</SelectItem>
-                      <SelectItem value="app">Application</SelectItem>
-                    </SelectContent>
-                  </Select>
+                <Select value={category} onValueChange={(value) => setCategory(value)}>
+                  <SelectTrigger className="w-full sm:w-[180px] bg-malectrica-darker border-malectrica-blue/30">
+                    <SelectValue className="text-white">{category}</SelectValue>
+                  </SelectTrigger>
+                  <SelectContent className="bg-malectrica-darker border-malectrica-blue/30 text-white">
+                    <SelectItem value="All Categories">All Categories</SelectItem>
+                    <SelectItem value="Network">Network</SelectItem>
+                    <SelectItem value="Encryption">Encryption</SelectItem>
+                    <SelectItem value="Detection">Detection</SelectItem>
+                    <SelectItem value="Cloud">Cloud</SelectItem>
+                    <SelectItem value="Application">Application</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select value={sortOrder} onValueChange={(value) => setSortOrder(value)}>
+                  <SelectTrigger className="w-full sm:w-[150px] bg-malectrica-darker border-malectrica-blue/30">
+                    <SelectValue className="text-white">{sortOrder}</SelectValue>
+                  </SelectTrigger>
+                  <SelectContent className="bg-malectrica-darker border-malectrica-blue/30 text-white">
+                    <SelectItem value="Newest First">Newest First</SelectItem>
+                    <SelectItem value="Oldest First">Oldest First</SelectItem>
+                    <SelectItem value="Most Popular">Most Popular</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <div className="hidden lg:flex gap-2">
+                  <Button variant="outline" size="icon" className="border-malectrica-blue/30 bg-malectrica-darker">
+                    <Filter className="h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" size="icon" className="border-malectrica-blue/30 bg-malectrica-darker">
+                    <ArrowDownAZ className="h-4 w-4" />
+                  </Button>
                 </div>
-
-                <Button variant="outline" size="icon" className="border-malectrica-blue/30 bg-malectrica-darker">
-                  <Filter className="h-4 w-4" />
-                </Button>
-                <Button variant="outline" size="icon" className="border-malectrica-blue/30 bg-malectrica-darker">
-                  <ArrowDownAZ className="h-4 w-4" />
-                </Button>
               </div>
-              <TabsContent value="all" className="mt-6">
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  {displayedTools.map((tool, i) => (
-                    <Card
-                      key={i}
-                      className="bg-malectrica-darker border-malectrica-blue/20 hover:bg-malectrica-blue/10 transition-colors"
-                    >
-                      <CardHeader>
-                        <div className="flex items-center gap-2">
-                          {tool.icon}
-                          <CardTitle className="text-xl text-white">{tool.title}</CardTitle>
-                        </div>
-                        <CardDescription className="text-gray-400">{tool.description}</CardDescription>
-                      </CardHeader>
-                      <CardContent className="flex flex-wrap gap-2">
-                        {tool.tags.map((tag, i) => (
-                          <Badge
-                            key={i}
-                            variant="outline"
-                            className={
-                              i % 2 === 0
-                                ? "border-malectrica-blue/30 text-malectrica-blue"
-                                : "border-malectrica-purple/30 text-malectrica-purple"
-                            }
-                          >
-                            {tag}
-                          </Badge>
-                        ))}
-                      </CardContent>
-                      <CardFooter className="flex justify-between">
-                        <div className="flex items-center gap-2">
-                          <Badge variant="outline" className="border-malectrica-blue/30 text-malectrica-blue">
-                            {tool.language}
-                          </Badge>
-                          <div className="flex items-center text-sm text-gray-400">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              className="mr-1 h-4 w-4"
-                            >
-                              <path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"></path>
-                            </svg>
-                            {tool.stars}
-                          </div>
-                        </div>
-                        <Link href={`/tools/${tool.title.toLowerCase()}`}>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="gap-1 text-malectrica-blue hover:text-malectrica-brightBlue hover:bg-malectrica-blue/20"
-                          >
-                            View Tool <ChevronRight className="h-4 w-4" />
-                          </Button>
-                        </Link>
-                      </CardFooter>
-                    </Card>
-                  ))}
-                </div>
-              </TabsContent>
+            </div>
 
-              <TabsContent value="featured" className="mt-6">
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  {featuredTools.map((tool, i) => (
-                    <Card
-                      key={i}
-                      className="bg-malectrica-darker border-malectrica-blue/20 hover:bg-malectrica-blue/10 transition-colors"
-                    >
-                      <CardHeader>
-                        <div className="flex items-center gap-2">
-                          {tool.icon}
-                          <CardTitle className="text-xl text-white">{tool.title}</CardTitle>
-                        </div>
-                        <CardDescription className="text-gray-400">{tool.description}</CardDescription>
-                      </CardHeader>
-                      <CardContent className="flex flex-wrap gap-2">
-                        {tool.tags.map((tag, i) => (
-                          <Badge
-                            key={i}
-                            variant="outline"
-                            className={
-                              i % 2 === 0
-                                ? "border-malectrica-blue/30 text-malectrica-blue"
-                                : "border-malectrica-purple/30 text-malectrica-purple"
-                            }
+            <TabsContent value="all" className="mt-6">
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {displayedTools.map((tool, i) => (
+                  <Card
+                    key={i}
+                    className="bg-malectrica-darker border-malectrica-blue/20 hover:bg-malectrica-blue/10 transition-colors"
+                  >
+                    <CardHeader>
+                      <div className="flex items-center gap-2">
+                        {tool.icon}
+                        <CardTitle className="text-xl text-white">{tool.title}</CardTitle>
+                      </div>
+                      <CardDescription className="text-gray-400">{tool.description}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex flex-wrap gap-2">
+                      {tool.tags.map((tag, i) => (
+                        <Badge
+                          key={i}
+                          variant="outline"
+                          className={
+                            i % 2 === 0
+                              ? "border-malectrica-blue/30 text-malectrica-blue"
+                              : "border-malectrica-purple/30 text-malectrica-purple"
+                          }
+                        >
+                          {tag}
+                        </Badge>
+                      ))}
+                    </CardContent>
+                    <CardFooter className="flex justify-between">
+                      <div className="flex items-center gap-2">
+                        <Badge variant="outline" className="border-malectrica-blue/30 text-malectrica-blue">
+                          {tool.language}
+                        </Badge>
+                        <div className="flex items-center text-sm text-gray-400">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="mr-1 h-4 w-4"
                           >
-                            {tag}
-                          </Badge>
-                        ))}
-                      </CardContent>
-                      <CardFooter className="flex justify-between">
-                        <div className="flex items-center gap-2">
-                          <Badge variant="outline" className="border-malectrica-blue/30 text-malectrica-blue">
-                            {tool.language}
-                          </Badge>
-                          <div className="flex items-center text-sm text-gray-400">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              className="mr-1 h-4 w-4"
-                            >
-                              <path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"></path>
-                            </svg>
-                            {tool.stars}
-                          </div>
+                            <path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"></path>
+                          </svg>
+                          {tool.stars}
                         </div>
-                        <Link href={`/tools/${tool.title.toLowerCase()}`}>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="gap-1 text-malectrica-blue hover:text-malectrica-brightBlue hover:bg-malectrica-blue/20"
+                      </div>
+                      <Link href={`/tools/${tool.title.toLowerCase()}`}>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="gap-1 text-malectrica-blue hover:text-malectrica-brightBlue hover:bg-malectrica-blue/20"
+                        >
+                          View Tool <ChevronRight className="h-4 w-4" />
+                        </Button>
+                      </Link>
+                    </CardFooter>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="featured" className="mt-6">
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {featuredTools.map((tool, i) => (
+                  <Card
+                    key={i}
+                    className="bg-malectrica-darker border-malectrica-blue/20 hover:bg-malectrica-blue/10 transition-colors"
+                  >
+                    <CardHeader>
+                      <div className="flex items-center gap-2">
+                        {tool.icon}
+                        <CardTitle className="text-xl text-white">{tool.title}</CardTitle>
+                      </div>
+                      <CardDescription className="text-gray-400">{tool.description}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex flex-wrap gap-2">
+                      {tool.tags.map((tag, i) => (
+                        <Badge
+                          key={i}
+                          variant="outline"
+                          className={
+                            i % 2 === 0
+                              ? "border-malectrica-blue/30 text-malectrica-blue"
+                              : "border-malectrica-purple/30 text-malectrica-purple"
+                          }
+                        >
+                          {tag}
+                        </Badge>
+                      ))}
+                    </CardContent>
+                    <CardFooter className="flex justify-between">
+                      <div className="flex items-center gap-2">
+                        <Badge variant="outline" className="border-malectrica-blue/30 text-malectrica-blue">
+                          {tool.language}
+                        </Badge>
+                        <div className="flex items-center text-sm text-gray-400">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="mr-1 h-4 w-4"
                           >
-                            View Tool <ChevronRight className="h-4 w-4" />
-                          </Button>
-                        </Link>
-                      </CardFooter>
-                    </Card>
-                  ))}
-                </div>
-              </TabsContent>
-            </Tabs>
-          </div>
+                            <path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"></path>
+                          </svg>
+                          {tool.stars}
+                        </div>
+                      </div>
+                      <Link href={`/tools/${tool.title.toLowerCase()}`}>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="gap-1 text-malectrica-blue hover:text-malectrica-brightBlue hover:bg-malectrica-blue/20"
+                        >
+                          View Tool <ChevronRight className="h-4 w-4" />
+                        </Button>
+                      </Link>
+                    </CardFooter>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="latest" className="mt-6">
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {/* Add content for latest tools here */}
+                <p>Latest tools content goes here</p>
+              </div>
+            </TabsContent>
+          </Tabs>
 
           <div className="flex items-center justify-center mt-8 gap-2">
             {[1, 2, 3, 4, 5].map((page) => (
