@@ -362,7 +362,7 @@ export default function BlogPage() {
                         post.category === "Trends"
                           ? "bg-malectrica-blue/70 hover:bg-malectrica-blue text-white"
                           : post.category === "Cloud Security"
-                            ? "bg-malectrica-purple/70 hover:bg-malectrica-purple text-white"
+                            ? "bg-malectrica-blue/70 hover:bg-malectrica-blue text-white"
                             : "bg-malectrica-blue/70 hover:bg-malectrica-blue text-white"
                       }
                     >
