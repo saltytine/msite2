@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { ChevronRight, Filter, Tag, Clock, Heart } from 'lucide-react'
+import { ChevronRight, Filter, Tag, Clock, Heart } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -9,16 +9,55 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useState, useEffect } from "react"
+import { Linkedin, Github, Youtube } from "lucide-react"
+
+// Add these custom icon components for HackerOne and Bugcrowd
+const HackerOneIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
+    <path d="M7.5 12.5L10 15l6.5-6.5" />
+  </svg>
+)
+
+const BugcrowdIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
+    <path d="M12 16a4 4 0 100-8 4 4 0 000 8z" />
+    <path d="M12 8v2M12 14v2M8 12h2M14 12h2" />
+  </svg>
+)
 
 export default function BlogPage() {
   const [currentPage, setCurrentPage] = useState(1)
-  const [category, setCategory] = useState("all")
-  const [sortBy, setSortBy] = useState("newest")
+  const [category, setCategory] = useState("All Categories")
+  const [sortBy, setSortBy] = useState("Newest First")
   const itemsPerPage = 6
   const [filteredPosts, setFilteredPosts] = useState([])
   const [displayedPosts, setDisplayedPosts] = useState([])
   // Add a new state variable for the active tab
-  const [activeTab, setActiveTab] = useState("all");
+  const [activeTab, setActiveTab] = useState("all")
 
   const blogPosts = [
     {
@@ -120,7 +159,7 @@ export default function BlogPage() {
       likes: 103,
       comments: 31,
       readTime: "16 min",
-      tags: ["Zero Trust", "Enterprise Security", "Architecture", "Trends"],
+      tags: ["Zero Trust", "Enterprise Security", "Architecture"],
     },
     {
       title: "Reverse Engineering iOS Applications",
@@ -134,7 +173,7 @@ export default function BlogPage() {
       likes: 91,
       comments: 22,
       readTime: "13 min",
-      tags: ["iOS", "Mobile Security", "Reverse Engineering", "Tutorial"],
+      tags: ["iOS", "Mobile Security", "Reverse Engineering"],
     },
     {
       title: "Building Effective Security Monitoring",
@@ -149,7 +188,7 @@ export default function BlogPage() {
       likes: 88,
       comments: 25,
       readTime: "9 min",
-      tags: ["SOC", "Monitoring", "SIEM", "Detection", "Research"],
+      tags: ["SOC", "Monitoring", "SIEM", "Detection"],
     },
   ]
 
@@ -159,44 +198,45 @@ export default function BlogPage() {
   // Update the useEffect filtering logic to include tab filtering
   useEffect(() => {
     // Get all posts except the featured one
-    const regularPosts = blogPosts.slice(1);
-    
+    const regularPosts = blogPosts.slice(1)
+
     // Sort posts based on sortBy
-    let sorted = [...regularPosts];
-    
-    if (sortBy === "newest") {
-      sorted.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-    } else if (sortBy === "oldest") {
-      sorted.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-    } else if (sortBy === "popular") {
-      sorted.sort((a, b) => b.likes - a.likes);
+    const sorted = [...regularPosts]
+
+    if (sortBy === "Newest First") {
+      sorted.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    } else if (sortBy === "Oldest First") {
+      sorted.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    } else if (sortBy === "Most Popular") {
+      sorted.sort((a, b) => b.likes - a.likes)
     }
-    
+
     // Apply category filter from dropdown
-    let filtered = sorted;
-    if (category !== "all") {
-      filtered = filtered.filter(post => post.category.toLowerCase().includes(category.toLowerCase()));
+    let filtered = sorted
+    if (category !== "All Categories") {
+      filtered = filtered.filter((post) => post.category.toLowerCase().includes(category.toLowerCase()))
     }
-    
+
     // Apply tab filter
     if (activeTab === "trends") {
-      filtered = filtered.filter(post => post.tags.some(tag => tag.toLowerCase().includes("trends")));
+      filtered = filtered.filter((post) => post.category === "Trends")
     } else if (activeTab === "tutorials") {
       // Assuming tutorials would be tagged with a specific category
-      filtered = filtered.filter(post => post.tags.some(tag => tag.toLowerCase().includes("tutorial")));
+      filtered = filtered.filter((post) => post.tags.some((tag) => tag.toLowerCase().includes("tutorial")))
     } else if (activeTab === "research") {
       // Assuming research posts would be tagged with research or have research in the title
-      filtered = filtered.filter(post => 
-        post.tags.some(tag => tag.toLowerCase().includes("research")) || 
-        post.title.toLowerCase().includes("research")
-      );
+      filtered = filtered.filter(
+        (post) =>
+          post.tags.some((tag) => tag.toLowerCase().includes("research")) ||
+          post.title.toLowerCase().includes("research"),
+      )
     }
-    
-    setFilteredPosts(filtered);
-    
+
+    setFilteredPosts(filtered)
+
     // Reset to first page when filters change
-    setCurrentPage(1);
-  }, [sortBy, category, activeTab]);
+    setCurrentPage(1)
+  }, [sortBy, category, activeTab])
 
   useEffect(() => {
     const startIndex = (currentPage - 1) * itemsPerPage
@@ -257,9 +297,8 @@ export default function BlogPage() {
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-            {/* Update the Tabs component to set the activeTab */}
-            <Tabs defaultValue="all" className="w-full md:w-auto" onValueChange={setActiveTab}>
+          <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
+            <Tabs defaultValue="all" className="w-full lg:w-auto" onValueChange={setActiveTab}>
               <TabsList className="bg-malectrica-darker">
                 <TabsTrigger value="all">All Posts</TabsTrigger>
                 <TabsTrigger value="trends">Trends</TabsTrigger>
@@ -268,40 +307,40 @@ export default function BlogPage() {
               </TabsList>
             </Tabs>
 
-            <div className="flex flex-col md:flex-row gap-2 w-full md:w-auto">
-              <div className="flex gap-2">
-                <Select defaultValue="category" onValueChange={(value) => setCategory(value)}>
-                  <SelectTrigger className="w-full md:w-[180px] bg-malectrica-darker border-malectrica-blue/30">
-                    <SelectValue placeholder="Category" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-malectrica-darker border-malectrica-blue/30 text-white">
-                    <SelectItem value="all">All Categories</SelectItem>
-                    <SelectItem value="trends">Trends</SelectItem>
-                    <SelectItem value="cloud">Cloud Security</SelectItem>
-                    <SelectItem value="web">Web Security</SelectItem>
-                    <SelectItem value="mobile">Mobile Security</SelectItem>
-                    <SelectItem value="cryptography">Cryptography</SelectItem>
-                  </SelectContent>
-                </Select>
+            <div className="flex flex-wrap gap-2 w-full lg:w-auto">
+              <Select value={category} onValueChange={(value) => setCategory(value)}>
+                <SelectTrigger className="w-full sm:w-[180px] bg-malectrica-darker border-malectrica-blue/30">
+                  <SelectValue className="text-white">{category}</SelectValue>
+                </SelectTrigger>
+                <SelectContent className="bg-malectrica-darker border-malectrica-blue/30 text-white">
+                  <SelectItem value="All Categories">All Categories</SelectItem>
+                  <SelectItem value="Trends">Trends</SelectItem>
+                  <SelectItem value="Cloud Security">Cloud Security</SelectItem>
+                  <SelectItem value="Web Security">Web Security</SelectItem>
+                  <SelectItem value="Mobile Security">Mobile Security</SelectItem>
+                  <SelectItem value="Cryptography">Cryptography</SelectItem>
+                </SelectContent>
+              </Select>
 
-                <Select defaultValue="date" onValueChange={(value) => setSortBy(value)}>
-                  <SelectTrigger className="w-full md:w-[150px] bg-malectrica-darker border-malectrica-blue/30">
-                    <SelectValue placeholder="Sort By" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-malectrica-darker border-malectrica-blue/30 text-white">
-                    <SelectItem value="newest">Newest First</SelectItem>
-                    <SelectItem value="oldest">Oldest First</SelectItem>
-                    <SelectItem value="popular">Most Popular</SelectItem>
-                  </SelectContent>
-                </Select>
+              <Select value={sortBy} onValueChange={(value) => setSortBy(value)}>
+                <SelectTrigger className="w-full sm:w-[150px] bg-malectrica-darker border-malectrica-blue/30">
+                  <SelectValue className="text-white">{sortBy}</SelectValue>
+                </SelectTrigger>
+                <SelectContent className="bg-malectrica-darker border-malectrica-blue/30 text-white">
+                  <SelectItem value="Newest First">Newest First</SelectItem>
+                  <SelectItem value="Oldest First">Oldest First</SelectItem>
+                  <SelectItem value="Most Popular">Most Popular</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <div className="hidden lg:flex gap-2">
+                <Button variant="outline" size="icon" className="border-malectrica-blue/30 bg-malectrica-darker">
+                  <Filter className="h-4 w-4" />
+                </Button>
+                <Button variant="outline" size="icon" className="border-malectrica-blue/30 bg-malectrica-darker">
+                  <Tag className="h-4 w-4" />
+                </Button>
               </div>
-
-              <Button variant="outline" size="icon" className="border-malectrica-blue/30 bg-malectrica-darker">
-                <Filter className="h-4 w-4" />
-              </Button>
-              <Button variant="outline" size="icon" className="border-malectrica-blue/30 bg-malectrica-darker">
-                <Tag className="h-4 w-4" />
-              </Button>
             </div>
           </div>
 
@@ -379,6 +418,46 @@ export default function BlogPage() {
                 </CardFooter>
               </Card>
             ))}
+          </div>
+
+          {/* Company Socials */}
+          <div className="mt-12 mb-8 py-8 border-t border-b border-malectrica-blue/20">
+            <div className="text-center">
+              <h3 className="text-2xl font-bold mb-4">Connect with Malectrica</h3>
+              <p className="text-gray-400 mb-6">Stay updated with our latest research and insights</p>
+              <div className="flex justify-center space-x-6">
+                <Link href="https://github.com/malectrica" target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" size="icon" className="rounded-full">
+                    <Github className="h-5 w-5" />
+                    <span className="sr-only">GitHub</span>
+                  </Button>
+                </Link>
+                <Link href="https://youtube.com/malectrica" target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" size="icon" className="rounded-full">
+                    <Youtube className="h-5 w-5" />
+                    <span className="sr-only">YouTube</span>
+                  </Button>
+                </Link>
+                <Link href="https://linkedin.com/company/malectrica" target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" size="icon" className="rounded-full">
+                    <Linkedin className="h-5 w-5" />
+                    <span className="sr-only">LinkedIn</span>
+                  </Button>
+                </Link>
+                <Link href="https://hackerone.com/malectrica" target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" size="icon" className="rounded-full">
+                    <HackerOneIcon className="h-5 w-5" />
+                    <span className="sr-only">HackerOne</span>
+                  </Button>
+                </Link>
+                <Link href="https://bugcrowd.com/malectrica" target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" size="icon" className="rounded-full">
+                    <BugcrowdIcon className="h-5 w-5" />
+                    <span className="sr-only">Bugcrowd</span>
+                  </Button>
+                </Link>
+              </div>
+            </div>
           </div>
 
           <div className="flex items-center justify-center mt-8 gap-2">
