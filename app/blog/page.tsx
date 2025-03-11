@@ -426,13 +426,13 @@ export default function BlogPage() {
               <h3 className="text-2xl font-bold mb-4">Connect with Malectrica</h3>
               <p className="text-gray-400 mb-6">Stay updated with our latest research and insights</p>
               <div className="flex justify-center space-x-6">
-                <Link href="https://github.com/malectrica" target="_blank" rel="noopener noreferrer">
+                <Link href="https://github.com/malectricasoftware" target="_blank" rel="noopener noreferrer">
                   <Button variant="outline" size="icon" className="rounded-full">
                     <Github className="h-5 w-5" />
                     <span className="sr-only">GitHub</span>
                   </Button>
                 </Link>
-                <Link href="https://youtube.com/malectrica" target="_blank" rel="noopener noreferrer">
+                <Link href="https://youtube.com/@malectrica" target="_blank" rel="noopener noreferrer">
                   <Button variant="outline" size="icon" className="rounded-full">
                     <Youtube className="h-5 w-5" />
                     <span className="sr-only">YouTube</span>
@@ -444,7 +444,7 @@ export default function BlogPage() {
                     <span className="sr-only">LinkedIn</span>
                   </Button>
                 </Link>
-                <Link href="https://hackerone.com/malectrica" target="_blank" rel="noopener noreferrer">
+                <Link href="https://hackerone.com/malectricaofficial" target="_blank" rel="noopener noreferrer">
                   <Button variant="outline" size="icon" className="rounded-full">
                     <HackerOneIcon className="h-5 w-5" />
                     <span className="sr-only">HackerOne</span>
