@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { ChevronRight, Filter, CalendarDays } from 'lucide-react'
+import { ChevronRight, Filter, CalendarDays } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -178,38 +178,38 @@ export default function VulnerabilitiesPage() {
     },
   ]
   const [currentPage, setCurrentPage] = useState(1)
-  const [category, setCategory] = useState("all")
-  const [year, setYear] = useState("all")
+  const [category, setCategory] = useState("All Categories")
+  const [year, setYear] = useState("All Years")
   const itemsPerPage = 4
   const [filteredVulnerabilities, setFilteredVulnerabilities] = useState(vulnerabilities)
   const [displayedVulnerabilities, setDisplayedVulnerabilities] = useState([])
   // Add a new state variable for the active tab
-  const [activeTab, setActiveTab] = useState("all");
+  const [activeTab, setActiveTab] = useState("all")
 
   // Update the useEffect filtering logic to include severity filtering
   useEffect(() => {
-    let result = vulnerabilities;
+    let result = vulnerabilities
 
     // Filter by category
-    if (category !== "all") {
-      result = result.filter(vuln => vuln.category.toLowerCase().includes(category.toLowerCase()));
+    if (category !== "All Categories") {
+      result = result.filter((vuln) => vuln.category.toLowerCase().includes(category.replace(" ", "").toLowerCase()))
     }
 
     // Filter by year
-    if (year !== "all") {
-      result = result.filter(vuln => vuln.date.startsWith(year));
+    if (year !== "All Years") {
+      result = result.filter((vuln) => vuln.date.startsWith(year))
     }
 
     // Filter by severity (tab)
     if (activeTab !== "all") {
-      result = result.filter(vuln => vuln.severity.toLowerCase() === activeTab.toLowerCase());
+      result = result.filter((vuln) => vuln.severity.toLowerCase() === activeTab.toLowerCase())
     }
 
-    setFilteredVulnerabilities(result);
+    setFilteredVulnerabilities(result)
 
     // Reset to first page when filters change
-    setCurrentPage(1);
-  }, [category, year, activeTab]);
+    setCurrentPage(1)
+  }, [category, year, activeTab])
 
   useEffect(() => {
     const startIndex = (currentPage - 1) * itemsPerPage
@@ -230,9 +230,8 @@ export default function VulnerabilitiesPage() {
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-            {/* Update the Tabs component to set the activeTab */}
-            <Tabs defaultValue="all" className="w-full md:w-auto" onValueChange={setActiveTab}>
+          <Tabs defaultValue="all" className="w-full">
+            <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
               <TabsList className="bg-malectrica-darker">
                 <TabsTrigger value="all">All</TabsTrigger>
                 <TabsTrigger value="critical">Critical</TabsTrigger>
@@ -240,46 +239,47 @@ export default function VulnerabilitiesPage() {
                 <TabsTrigger value="medium">Medium</TabsTrigger>
                 <TabsTrigger value="low">Low</TabsTrigger>
               </TabsList>
-            </Tabs>
-
-            <div className="flex flex-col md:flex-row gap-2 w-full md:w-auto">
-              <div className="flex gap-2">
-                <Select defaultValue="category" onValueChange={(value) => setCategory(value)}>
-                  <SelectTrigger className="w-full md:w-[180px] bg-malectrica-darker border-malectrica-blue/30">
-                    <SelectValue placeholder="Category" />
+              <div className="flex flex-wrap gap-2 w-full lg:w-auto">
+                <Select value={category} onValueChange={(value) => setCategory(value)}>
+                  <SelectTrigger className="w-full sm:w-[180px] bg-malectrica-darker border-malectrica-blue/30">
+                    <SelectValue className="text-white">{category}</SelectValue>
                   </SelectTrigger>
                   <SelectContent className="bg-malectrica-darker border-malectrica-blue/30 text-white">
-                    <SelectItem value="all">All Categories</SelectItem>
-                    <SelectItem value="injection">Injection</SelectItem>
-                    <SelectItem value="auth">Authentication</SelectItem>
-                    <SelectItem value="xss">Cross-Site Scripting</SelectItem>
-                    <SelectItem value="overflow">Buffer Overflow</SelectItem>
-                    <SelectItem value="info">Information Disclosure</SelectItem>
+                    <SelectItem value="All Categories">All Categories</SelectItem>
+                    <SelectItem value="Injection">Injection</SelectItem>
+                    <SelectItem value="Authentication">Authentication</SelectItem>
+                    <SelectItem value="XSS">Cross-Site Scripting</SelectItem>
+                    <SelectItem value="Buffer Overflow">Buffer Overflow</SelectItem>
+                    <SelectItem value="Information Disclosure">Information Disclosure</SelectItem>
                   </SelectContent>
                 </Select>
 
-                <Select defaultValue="year" onValueChange={(value) => setYear(value)}>
-                  <SelectTrigger className="w-full md:w-[130px] bg-malectrica-darker border-malectrica-blue/30">
-                    <SelectValue placeholder="Year" />
+                <Select value={year} onValueChange={(value) => setYear(value)}>
+                  <SelectTrigger className="w-full sm:w-[130px] bg-malectrica-darker border-malectrica-blue/30">
+                    <SelectValue className="text-white">{year}</SelectValue>
                   </SelectTrigger>
                   <SelectContent className="bg-malectrica-darker border-malectrica-blue/30 text-white">
-                    <SelectItem value="all">All Years</SelectItem>
+                    <SelectItem value="All Years">All Years</SelectItem>
                     <SelectItem value="2023">2023</SelectItem>
                     <SelectItem value="2022">2022</SelectItem>
                     <SelectItem value="2021">2021</SelectItem>
                     <SelectItem value="2020">2020</SelectItem>
                   </SelectContent>
                 </Select>
-              </div>
 
-              <Button variant="outline" size="icon" className="border-malectrica-blue/30 bg-malectrica-darker">
-                <Filter className="h-4 w-4" />
-              </Button>
-              <Button variant="outline" size="icon" className="border-malectrica-blue/30 bg-malectrica-darker">
-                <CalendarDays className="h-4 w-4" />
-              </Button>
+                <div className="hidden lg:flex gap-2">
+                  <Button variant="outline" size="icon" className="border-malectrica-blue/30 bg-malectrica-darker">
+                    <Filter className="h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" size="icon" className="border-malectrica-blue/30 bg-malectrica-darker">
+                    <CalendarDays className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
             </div>
-          </div>
+
+            {/* TabsContent sections remain the same */}
+          </Tabs>
 
           <div className="grid gap-6 mt-6">
             {displayedVulnerabilities.map((vuln, i) => (
