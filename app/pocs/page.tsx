@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { ChevronRight, Filter, CalendarDays, Code, Github, Eye } from 'lucide-react'
+import { ChevronRight, Filter, CalendarDays, Code, Github, Eye } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -161,43 +161,45 @@ export default function POCsPage() {
   ]
 
   const [currentPage, setCurrentPage] = useState(1)
-  const [language, setLanguage] = useState("all")
-  const [severity, setSeverity] = useState("all")
+  const [language, setLanguage] = useState("All Languages")
+  const [severity, setSeverity] = useState("All Severities")
   const itemsPerPage = 4
   const [filteredPocs, setFilteredPocs] = useState(pocs)
   const [displayedPocs, setDisplayedPocs] = useState([])
   // Add a new state variable for the active tab
-  const [activeTab, setActiveTab] = useState("all");
+  const [activeTab, setActiveTab] = useState("all")
 
   useEffect(() => {
-    let result = pocs;
-    
+    let result = pocs
+
     // Filter by language
-    if (language !== "all") {
-      result = result.filter(poc => poc.language.toLowerCase() === language.toLowerCase());
+    if (language !== "All Languages") {
+      result = result.filter((poc) => poc.language === language)
     }
-    
-    // Filter by severity
-    if (severity !== "all") {
-      result = result.filter(poc => poc.impact.toLowerCase() === severity.toLowerCase());
+
+    if (severity !== "All Severities") {
+      result = result.filter((poc) => poc.impact === severity)
     }
-    
-    // Filter by tab
-    if (activeTab === "verified") {
-      result = result.filter(poc => poc.verifiedWorks === true);
-    } else if (activeTab === "recent") {
-      // Sort by date (most recent first) and take top 5
-      result = [...result].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5);
-    } else if (activeTab === "popular") {
-      // Sort by views (most viewed first)
-      result = [...result].sort((a, b) => b.views - a.views);
+
+    // Filter and sort by tab
+    switch (activeTab) {
+      case "verified":
+        result = result.filter((poc) => poc.verifiedWorks === true)
+        break
+      case "recent":
+        result = [...result].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        break
+      case "popular":
+        result = [...result].sort((a, b) => b.views - a.views)
+        break
+      // "all" case doesn't need special handling
     }
-    
-    setFilteredPocs(result);
-    
+
+    setFilteredPocs(result)
+
     // Reset to first page when filters change
-    setCurrentPage(1);
-  }, [language, severity, activeTab]);
+    setCurrentPage(1)
+  }, [language, severity, activeTab])
 
   useEffect(() => {
     const startIndex = (currentPage - 1) * itemsPerPage
@@ -218,8 +220,8 @@ export default function POCsPage() {
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-            <Tabs defaultValue="all" className="w-full md:w-auto" onValueChange={setActiveTab}>
+          <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
+            <Tabs defaultValue="all" className="w-full lg:w-auto" onValueChange={setActiveTab}>
               <TabsList className="bg-malectrica-darker">
                 <TabsTrigger value="all">All POCs</TabsTrigger>
                 <TabsTrigger value="verified">Verified</TabsTrigger>
@@ -228,42 +230,42 @@ export default function POCsPage() {
               </TabsList>
             </Tabs>
 
-            <div className="flex flex-col md:flex-row gap-2 w-full md:w-auto">
-              <div className="flex gap-2">
-                <Select defaultValue="language" onValueChange={(value) => setLanguage(value)}>
-                  <SelectTrigger className="w-full md:w-[150px] bg-malectrica-darker border-malectrica-blue/30">
-                    <SelectValue placeholder="Language" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-malectrica-darker border-malectrica-blue/30 text-white">
-                    <SelectItem value="all">All Languages</SelectItem>
-                    <SelectItem value="javascript">JavaScript</SelectItem>
-                    <SelectItem value="python">Python</SelectItem>
-                    <SelectItem value="c">C/C++</SelectItem>
-                    <SelectItem value="php">PHP</SelectItem>
-                    <SelectItem value="bash">Bash</SelectItem>
-                  </SelectContent>
-                </Select>
+            <div className="flex flex-wrap gap-2 w-full lg:w-auto">
+              <Select value={language} onValueChange={(value) => setLanguage(value)}>
+                <SelectTrigger className="w-full sm:w-[150px] bg-malectrica-darker border-malectrica-blue/30">
+                  <SelectValue className="text-white">{language}</SelectValue>
+                </SelectTrigger>
+                <SelectContent className="bg-malectrica-darker border-malectrica-blue/30 text-white">
+                  <SelectItem value="All Languages">All Languages</SelectItem>
+                  <SelectItem value="JavaScript">JavaScript</SelectItem>
+                  <SelectItem value="Python">Python</SelectItem>
+                  <SelectItem value="C/C++">C/C++</SelectItem>
+                  <SelectItem value="PHP">PHP</SelectItem>
+                  <SelectItem value="Bash">Bash</SelectItem>
+                </SelectContent>
+              </Select>
 
-                <Select defaultValue="severity" onValueChange={(value) => setSeverity(value)}>
-                  <SelectTrigger className="w-full md:w-[150px] bg-malectrica-darker border-malectrica-blue/30">
-                    <SelectValue placeholder="Severity" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-malectrica-darker border-malectrica-blue/30 text-white">
-                    <SelectItem value="all">All Severities</SelectItem>
-                    <SelectItem value="critical">Critical</SelectItem>
-                    <SelectItem value="high">High</SelectItem>
-                    <SelectItem value="medium">Medium</SelectItem>
-                    <SelectItem value="low">Low</SelectItem>
-                  </SelectContent>
-                </Select>
+              <Select value={severity} onValueChange={(value) => setSeverity(value)}>
+                <SelectTrigger className="w-full sm:w-[150px] bg-malectrica-darker border-malectrica-blue/30">
+                  <SelectValue className="text-white">{severity}</SelectValue>
+                </SelectTrigger>
+                <SelectContent className="bg-malectrica-darker border-malectrica-blue/30 text-white">
+                  <SelectItem value="All Severities">All Severities</SelectItem>
+                  <SelectItem value="Critical">Critical</SelectItem>
+                  <SelectItem value="High">High</SelectItem>
+                  <SelectItem value="Medium">Medium</SelectItem>
+                  <SelectItem value="Low">Low</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <div className="hidden lg:flex gap-2">
+                <Button variant="outline" size="icon" className="border-malectrica-blue/30 bg-malectrica-darker">
+                  <Filter className="h-4 w-4" />
+                </Button>
+                <Button variant="outline" size="icon" className="border-malectrica-blue/30 bg-malectrica-darker">
+                  <CalendarDays className="h-4 w-4" />
+                </Button>
               </div>
-
-              <Button variant="outline" size="icon" className="border-malectrica-blue/30 bg-malectrica-darker">
-                <Filter className="h-4 w-4" />
-              </Button>
-              <Button variant="outline" size="icon" className="border-malectrica-blue/30 bg-malectrica-darker">
-                <CalendarDays className="h-4 w-4" />
-              </Button>
             </div>
           </div>
 
