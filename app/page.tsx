@@ -1046,7 +1046,7 @@ print(f"Forged token: {forged_token}")`}
               </h2>
               <p className="text-xl text-gray-400 mb-8">Stay updated with our latest research and insights</p>
               <div className="flex justify-center space-x-6">
-                <Link href="https://github.com/malectrica" target="_blank" rel="noopener noreferrer">
+                <Link href="https://github.com/malectricasoftware" target="_blank" rel="noopener noreferrer">
                   <Button
                     variant="outline"
                     size="icon"
@@ -1056,7 +1056,7 @@ print(f"Forged token: {forged_token}")`}
                     <span className="sr-only">GitHub</span>
                   </Button>
                 </Link>
-                <Link href="https://youtube.com/malectrica" target="_blank" rel="noopener noreferrer">
+                <Link href="https://youtube.com/@malectrica" target="_blank" rel="noopener noreferrer">
                   <Button
                     variant="outline"
                     size="icon"
@@ -1076,7 +1076,7 @@ print(f"Forged token: {forged_token}")`}
                     <span className="sr-only">LinkedIn</span>
                   </Button>
                 </Link>
-                <Link href="https://hackerone.com/malectrica" target="_blank" rel="noopener noreferrer">
+                <Link href="https://hackerone.com/malectricaofficial" target="_blank" rel="noopener noreferrer">
                   <Button
                     variant="outline"
                     size="icon"
