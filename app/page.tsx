@@ -14,12 +14,52 @@ import {
   Bell,
   Github,
   Users,
+  Youtube,
+  Linkedin,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+
+// Add these custom icon components for HackerOne and Bugcrowd
+const HackerOneIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
+    <path d="M7.5 12.5L10 15l6.5-6.5" />
+  </svg>
+)
+
+const BugcrowdIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
+    <path d="M12 16a4 4 0 100-8 4 4 0 000 8z" />
+    <path d="M12 8v2M12 14v2M8 12h2M14 12h2" />
+  </svg>
+)
 
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -997,178 +1037,244 @@ print(f"Forged token: {forged_token}")`}
             </div>
           </div>
         </section>
-      </main>
-      <footer className="w-full border-t border-malectrica-blue/20 bg-black text-gray-100 py-12 md:py-16">
-        <div className="container px-4 md:px-6">
-          <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
-            <div className="space-y-4">
-              <Link href="/" className="flex items-center gap-2 transition-transform hover:scale-105">
-                <Zap className="h-6 w-6 text-malectrica-brightBlue" />
-                <span className="font-bold text-xl">Malectrica</span>
-              </Link>
+        {/* Company Socials */}
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-b from-malectrica-dark via-malectrica-blue/30 to-black">
+          <div className="container px-4 md:px-6">
+            <div className="text-center">
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-gray-100 mb-4">
+                Connect with Malectrica
+              </h2>
+              <p className="text-xl text-gray-400 mb-8">Stay updated with our latest research and insights</p>
+              <div className="flex justify-center space-x-6">
+                <Link href="https://github.com/malectrica" target="_blank" rel="noopener noreferrer">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="rounded-full bg-malectrica-blue/10 border-malectrica-blue/30 hover:bg-malectrica-blue/20"
+                  >
+                    <Github className="h-5 w-5" />
+                    <span className="sr-only">GitHub</span>
+                  </Button>
+                </Link>
+                <Link href="https://youtube.com/malectrica" target="_blank" rel="noopener noreferrer">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="rounded-full bg-malectrica-blue/10 border-malectrica-blue/30 hover:bg-malectrica-blue/20"
+                  >
+                    <Youtube className="h-5 w-5" />
+                    <span className="sr-only">YouTube</span>
+                  </Button>
+                </Link>
+                <Link href="https://linkedin.com/company/malectrica" target="_blank" rel="noopener noreferrer">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="rounded-full bg-malectrica-blue/10 border-malectrica-blue/30 hover:bg-malectrica-blue/20"
+                  >
+                    <Linkedin className="h-5 w-5" />
+                    <span className="sr-only">LinkedIn</span>
+                  </Button>
+                </Link>
+                <Link href="https://hackerone.com/malectrica" target="_blank" rel="noopener noreferrer">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="rounded-full bg-malectrica-blue/10 border-malectrica-blue/30 hover:bg-malectrica-blue/20"
+                  >
+                    <HackerOneIcon className="h-5 w-5" />
+                    <span className="sr-only">HackerOne</span>
+                  </Button>
+                </Link>
+                <Link href="https://bugcrowd.com/malectrica" target="_blank" rel="noopener noreferrer">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="rounded-full bg-malectrica-blue/10 border-malectrica-blue/30 hover:bg-malectrica-blue/20"
+                  >
+                    <BugcrowdIcon className="h-5 w-5" />
+                    <span className="sr-only">Bugcrowd</span>
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <footer className="w-full border-t border-malectrica-blue/20 bg-black text-gray-100 py-12 md:py-16">
+          <div className="container px-4 md:px-6">
+            <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+              <div className="space-y-4">
+                <Link href="/" className="flex items-center gap-2 transition-transform hover:scale-105">
+                  <Zap className="h-6 w-6 text-malectrica-brightBlue" />
+                  <span className="font-bold text-xl">Malectrica</span>
+                </Link>
+                <p className="text-sm text-gray-400">
+                  A cybersecurity research collective dedicated to making the digital world safer for everyone.
+                </p>
+              </div>
+              <div>
+                <h3 className="mb-4 text-sm font-medium">Resources</h3>
+                <ul className="space-y-2 text-sm text-gray-400">
+                  <li>
+                    <Link href="/tools" className="hover:text-malectrica-brightBlue transition-colors">
+                      Security Tools
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/vulnerabilities" className="hover:text-malectrica-brightBlue transition-colors">
+                      Vulnerabilities
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/pocs" className="hover:text-malectrica-brightBlue transition-colors">
+                      POCs
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/writeups" className="hover:text-malectrica-brightBlue transition-colors">
+                      Write-ups
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/blog" className="hover:text-malectrica-brightBlue transition-colors">
+                      Blog
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="mb-4 text-sm font-medium">Company</h3>
+                <ul className="space-y-2 text-sm text-gray-400">
+                  <li>
+                    <Link href="/about" className="hover:text-malectrica-brightBlue transition-colors">
+                      About Us
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/team" className="hover:text-malectrica-brightBlue transition-colors">
+                      Our Team
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/careers" className="hover:text-malectrica-brightBlue transition-colors">
+                      Careers
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/contact" className="hover:text-malectrica-brightBlue transition-colors">
+                      Contact
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/press" className="hover:text-malectrica-brightBlue transition-colors">
+                      Press Kit
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="mb-4 text-sm font-medium">Legal</h3>
+                <ul className="space-y-2 text-sm text-gray-400">
+                  <li>
+                    <Link href="/privacy" className="hover:text-malectrica-brightBlue transition-colors">
+                      Privacy Policy
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/terms" className="hover:text-malectrica-brightBlue transition-colors">
+                      Terms of Service
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/disclosure" className="hover:text-malectrica-brightBlue transition-colors">
+                      Responsible Disclosure
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/ethics" className="hover:text-malectrica-brightBlue transition-colors">
+                      Ethics Policy
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div className="mt-8 border-t border-malectrica-blue/20 pt-8 flex flex-col-reverse gap-4 md:flex-row md:justify-between">
               <p className="text-sm text-gray-400">
-                A cybersecurity research collective dedicated to making the digital world safer for everyone.
+                &copy; {new Date().getFullYear()} Malectrica. All rights reserved.
               </p>
-            </div>
-            <div>
-              <h3 className="mb-4 text-sm font-medium">Resources</h3>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li>
-                  <Link href="/tools" className="hover:text-malectrica-brightBlue transition-colors">
-                    Security Tools
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/vulnerabilities" className="hover:text-malectrica-brightBlue transition-colors">
-                    Vulnerabilities
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/pocs" className="hover:text-malectrica-brightBlue transition-colors">
-                    POCs
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/writeups" className="hover:text-malectrica-brightBlue transition-colors">
-                    Write-ups
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/blog" className="hover:text-malectrica-brightBlue transition-colors">
-                    Blog
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="mb-4 text-sm font-medium">Company</h3>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li>
-                  <Link href="/about" className="hover:text-malectrica-brightBlue transition-colors">
-                    About Us
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/team" className="hover:text-malectrica-brightBlue transition-colors">
-                    Our Team
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/careers" className="hover:text-malectrica-brightBlue transition-colors">
-                    Careers
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/contact" className="hover:text-malectrica-brightBlue transition-colors">
-                    Contact
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/press" className="hover:text-malectrica-brightBlue transition-colors">
-                    Press Kit
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="mb-4 text-sm font-medium">Legal</h3>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li>
-                  <Link href="/privacy" className="hover:text-malectrica-brightBlue transition-colors">
-                    Privacy Policy
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/terms" className="hover:text-malectrica-brightBlue transition-colors">
-                    Terms of Service
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/disclosure" className="hover:text-malectrica-brightBlue transition-colors">
-                    Responsible Disclosure
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/ethics" className="hover:text-malectrica-brightBlue transition-colors">
-                    Ethics Policy
-                  </Link>
-                </li>
-              </ul>
+              <div className="flex gap-4">
+                <Link
+                  href="https://github.com/malectrica"
+                  target="_blank"
+                  className="text-gray-400 hover:text-malectrica-brightBlue transition-colors"
+                >
+                  <span className="sr-only">GitHub</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="h-5 w-5"
+                  >
+                    <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+                    <path d="M9 18c-4.51 2-5-2-7-2" />
+                  </svg>
+                </Link>
+                <Link
+                  href="https://twitter.com/malectrica"
+                  target="_blank"
+                  className="text-gray-400 hover:text-malectrica-brightBlue transition-colors"
+                >
+                  <span className="sr-only">Twitter</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="h-5 w-5"
+                  >
+                    <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
+                  </svg>
+                </Link>
+                <Link
+                  href="https://linkedin.com/company/malectrica"
+                  target="_blank"
+                  className="text-gray-400 hover:text-malectrica-brightBlue transition-colors"
+                >
+                  <span className="sr-only">LinkedIn</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="h-5 w-5"
+                  >
+                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                    <rect width="4" height="12" x="2" y="9" />
+                    <circle cx="4" cy="4" r="2" />
+                  </svg>
+                </Link>
+              </div>
             </div>
           </div>
-          <div className="mt-8 border-t border-malectrica-blue/20 pt-8 flex flex-col-reverse gap-4 md:flex-row md:justify-between">
-            <p className="text-sm text-gray-400">&copy; {new Date().getFullYear()} Malectrica. All rights reserved.</p>
-            <div className="flex gap-4">
-              <Link
-                href="https://github.com/malectrica"
-                target="_blank"
-                className="text-gray-400 hover:text-malectrica-brightBlue transition-colors"
-              >
-                <span className="sr-only">GitHub</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-5 w-5"
-                >
-                  <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
-                  <path d="M9 18c-4.51 2-5-2-7-2" />
-                </svg>
-              </Link>
-              <Link
-                href="https://twitter.com/malectrica"
-                target="_blank"
-                className="text-gray-400 hover:text-malectrica-brightBlue transition-colors"
-              >
-                <span className="sr-only">Twitter</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-5 w-5"
-                >
-                  <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
-                </svg>
-              </Link>
-              <Link
-                href="https://linkedin.com/company/malectrica"
-                target="_blank"
-                className="text-gray-400 hover:text-malectrica-brightBlue transition-colors"
-              >
-                <span className="sr-only">LinkedIn</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-5 w-5"
-                >
-                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                  <rect width="4" height="12" x="2" y="9" />
-                  <circle cx="4" cy="4" r="2" />
-                </svg>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </footer>
+        </footer>
+      </main>
     </div>
   )
 }
