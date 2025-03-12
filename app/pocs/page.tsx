@@ -217,6 +217,30 @@ export default function POCsPage() {
               <p className="text-gray-400 mt-2">
                 Demonstration code for security researchers to understand and verify vulnerabilities
               </p>
+              <div className="p-4 mt-4 mb-6 bg-malectrica-darker border border-malectrica-blue/20 rounded-lg">
+                <h3 className="text-lg font-medium text-malectrica-blue mb-2">Severity Rating System</h3>
+                <p className="text-sm text-gray-300 mb-2">
+                  Malectrica uses the Common Vulnerability Scoring System (CVSS) to determine vulnerability severity:
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                  <div className="flex items-center gap-2">
+                    <span className="text-red-400 font-medium">Critical</span>
+                    <span className="text-gray-300">CVSS 9.0-10.0: Severe impact, easily exploitable</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-orange-400 font-medium">High</span>
+                    <span className="text-gray-300">CVSS 7.0-8.9: Significant impact or easy exploitation</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-yellow-400 font-medium">Medium</span>
+                    <span className="text-gray-300">CVSS 4.0-6.9: Moderate impact, limited exploitation</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-blue-400 font-medium">Low</span>
+                    <span className="text-gray-300">CVSS 0.1-3.9: Limited impact and difficult to exploit</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
