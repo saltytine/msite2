@@ -230,6 +230,31 @@ export default function VulnerabilitiesPage() {
             </div>
           </div>
 
+          <div className="p-4 mt-4 mb-6 bg-malectrica-darker border border-malectrica-blue/20 rounded-lg">
+            <h3 className="text-lg font-medium text-malectrica-blue mb-2">Severity Rating System</h3>
+            <p className="text-sm text-gray-300 mb-2">
+              Malectrica uses the Common Vulnerability Scoring System (CVSS) to determine vulnerability severity:
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+              <div className="flex items-center gap-2">
+                <Badge className="bg-red-600/80 text-gray-100">Critical</Badge>
+                <span className="text-gray-300">CVSS 9.0-10.0: Severe impact, easily exploitable</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Badge className="border-orange-500/80 text-orange-400">High</Badge>
+                <span className="text-gray-300">CVSS 7.0-8.9: Significant impact or easy exploitation</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Badge className="bg-yellow-500/20 text-yellow-400">Medium</Badge>
+                <span className="text-gray-300">CVSS 4.0-6.9: Moderate impact, limited exploitation</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Badge className="border-blue-500/80 text-blue-400">Low</Badge>
+                <span className="text-gray-300">CVSS 0.1-3.9: Limited impact and difficult to exploit</span>
+              </div>
+            </div>
+          </div>
+
           <Tabs defaultValue="all" className="w-full">
             <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
               <TabsList className="bg-malectrica-darker">
