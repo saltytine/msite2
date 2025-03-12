@@ -992,9 +992,11 @@ print(f"Forged token: {forged_token}")`}
           </div>
         </section>
 
+        {/* Combined Stay Updated and Connect with Malectrica Section */}
         <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-b from-malectrica-dark via-malectrica-blue/30 to-black">
           <div className="container px-4 md:px-6">
-            <div className="grid gap-6 lg:grid-cols-2">
+            {/* Newsletter Subscription */}
+            <div className="grid gap-6 lg:grid-cols-2 mb-16">
               <div className="space-y-4">
                 <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight text-gray-100">
                   Stay Updated on Security Threats
@@ -1035,18 +1037,18 @@ print(f"Forged token: {forged_token}")`}
                 </p>
               </div>
             </div>
-          </div>
-        </section>
-        {/* Company Socials */}
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-b from-malectrica-dark via-malectrica-blue/30 to-black">
-          <div className="container px-4 md:px-6">
-            <div className="text-center">
+
+            {/* Divider */}
+            <div className="border-t border-malectrica-blue/20 my-8 max-w-3xl mx-auto"></div>
+
+            {/* Social Media Links */}
+            <div className="text-center mt-16">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-gray-100 mb-4">
                 Connect with Malectrica
               </h2>
               <p className="text-xl text-gray-400 mb-8">Stay updated with our latest research and insights</p>
               <div className="flex justify-center space-x-6">
-                <Link href="https://github.com/malectricasoftware" target="_blank" rel="noopener noreferrer">
+                <Link href="https://github.com/malectrica" target="_blank" rel="noopener noreferrer">
                   <Button
                     variant="outline"
                     size="icon"
@@ -1056,7 +1058,7 @@ print(f"Forged token: {forged_token}")`}
                     <span className="sr-only">GitHub</span>
                   </Button>
                 </Link>
-                <Link href="https://youtube.com/@malectrica" target="_blank" rel="noopener noreferrer">
+                <Link href="https://youtube.com/malectrica" target="_blank" rel="noopener noreferrer">
                   <Button
                     variant="outline"
                     size="icon"
@@ -1076,7 +1078,7 @@ print(f"Forged token: {forged_token}")`}
                     <span className="sr-only">LinkedIn</span>
                   </Button>
                 </Link>
-                <Link href="https://hackerone.com/malectricaofficial" target="_blank" rel="noopener noreferrer">
+                <Link href="https://hackerone.com/malectrica" target="_blank" rel="noopener noreferrer">
                   <Button
                     variant="outline"
                     size="icon"
