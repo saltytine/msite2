@@ -4,8 +4,6 @@ import { Inter } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
 import Navbar from "./components/navbar"
 import type { Metadata } from "next"
-import { Zap } from "lucide-react"
-import Link from "next/link"
 
 const inter = Inter({ subsets: ["latin"] })
 
